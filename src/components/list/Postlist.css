@@ -1,0 +1,26 @@
+.list-group{
+  margin: 5em;
+}
+.list-group-item{
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 8fr;
+}
+
+.post-text:hover{
+  text-decoration: underline;
+  color: black;
+}
+.vote-area{
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  margin-left: 0;
+}
+.vote-score{
+  cursor: text;
+}
+.post-text{
+  margin-top: 1.2em;
+  color: black;
+}
