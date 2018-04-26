@@ -3,17 +3,16 @@ import React from 'react';
 import './Categories.css';
 
 const Categories = (props) => {
-    const { fetchData, showSaved } = props;
+    const { fetchData, currentSub } = props;
     return (
         <div> 
             <ul>
                 <li>
-                    <button onClick={() => fetchData('hot')}>Hot</button>
-                    <button onClick={() => fetchData('new')}>New</button>
-                    <button onClick={() => fetchData('rising')}>Rising</button>
-                    <button onClick={() => fetchData('controversial')}>Controversial</button>
-                    <button onClick={() => fetchData('top')}>Top</button>
-                    <button onClick={() => showSaved()}>Saved</button>
+                    <button onClick={() => fetchData(currentSub, 'hot')}>Hot</button>
+                    <button onClick={() => fetchData(currentSub, 'new')}>New</button>
+                    <button onClick={() => fetchData(currentSub, 'rising')}>Rising</button>
+                    <button onClick={() => fetchData(currentSub, 'controversial')}>Controversial</button>
+                    <button onClick={() => fetchData(currentSub, 'top')}>Top</button>
                 </li>
             </ul>
         </div>

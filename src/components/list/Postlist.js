@@ -6,12 +6,14 @@ import './Postlist.css';
 
 
 const Postlist = (props) => {
-    const { post, toggle, eventHandler } = props;
+    const { post, eventHandler, savePost } = props;
     return (
         <div> 
             <div className="list-group">
            
-                {post.map((post) => (   
+                {
+                    
+                    post.map((post, index) => (   
                     
                 <div
                     key={post.id} 
@@ -29,7 +31,7 @@ const Postlist = (props) => {
                 >
                     {post.title}
                 </a>
-                <button  onClick={()=> eventHandler() }>{post.saved ? 'Save' : 'Not save'}</button>
+                <button  onClick={()=> {eventHandler(index); savePost(post, index);}}>{post.saved ? 'Unsave' : 'Save'}</button>
             </div>
             ))}
                
