@@ -32,6 +32,7 @@ const Postlist = (props) => {
                     {post.title}
                 </a>
                 <button  onClick={()=> {eventHandler(index); savePost(post, index);}}>{post.saved ? 'Unsave' : 'Save'}</button>
+                <a  href = {"https://reddit.com" + post.permalink} target = "_blank">{post.num_comments} Comments</a>
             </div>
             ))}
                
