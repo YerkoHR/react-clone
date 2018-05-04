@@ -1,6 +1,8 @@
 import React from 'react';
 import './Pagination.css';
 
+// ORGANIZED!
+
 const Pagination = (props) => {
     const {fetchPagination, page, totalPages} = props;
 

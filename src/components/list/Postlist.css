@@ -15,7 +15,6 @@ a{
     margin: 5px 10px 5px 1px;
 }
 .post-buttons{
-    
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -26,7 +25,8 @@ a{
 }
 .post-title:hover{
     text-decoration: none;
-    color: gray;
+ 
+    
 }
 .post-comments:hover{
     color: black;

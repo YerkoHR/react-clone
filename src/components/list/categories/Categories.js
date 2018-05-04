@@ -1,25 +1,25 @@
 import React from 'react';
 import './Categories.css';
 
+// ORGANIZED!
+
 const Categories = (props) => {
-    const { fetchData, currentSub } = props;
+    const { fetchData, currentSub, filters } = props;
 
     return (
         <div className="btn-group"> 
-            <button 
-                type="button" 
-                className="btn btn-secondary" 
-                onClick={() => fetchData(currentSub, 'hot')}
-            >
-                Hot
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={() => fetchData(currentSub, 'new')}>New</button>
-            <button type="button" className="btn btn-secondary" onClick={() => fetchData(currentSub, 'rising')}>Rising</button>
-            <button type="button" className="btn btn-secondary" onClick={() => fetchData(currentSub, 'controversial')}>Controversial</button>
-            <button type="button" className="btn btn-secondary" onClick={() => fetchData(currentSub, 'top')}>Top</button>
+            {filters.map((x, index)=>(
+                <button 
+                key={index}
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={() => fetchData(currentSub, x)}
+                >
+                    {x}
+                </button>
+            ))}
         </div>
     )
 }
-
 
 export default Categories;

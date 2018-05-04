@@ -1,10 +1,13 @@
 .Loading {
-    display: inline-block;
-    border: 2px solid #fff;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: rotate 1s infinite linear;
-  }
+  display: inline-block;
+  border: 3px solid #fff;
+  border-right-color: transparent;
+  border-radius: 70%;
+  animation: rotate 1s infinite linear;
+  position: fixed;
+  top: 25%;
+  left: 50%;
+}
   
   @keyframes rotate {
     0% {

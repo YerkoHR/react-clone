@@ -23,7 +23,7 @@ class List extends React.Component {
             saveShow: false, // State to show or don't save posts, since it's the only not fetched data here.
             currentSub: '', // State to apply filter.
             toggleForm: false, 
-            filters: [ 'Hot', 'New', 'Rising', 'Controversial', 'Top' ],
+            filters: [ 'hot', 'new', 'rising', 'controversial', 'top' ],
             page: 1, //  ------> everything from here to evaluate!
             totalPages: 50,
             after: '',
@@ -156,7 +156,7 @@ class List extends React.Component {
                     after,
                     before,
                     loading: false,
-                });console.log(url)
+                });
             })
         })
     }
@@ -174,7 +174,7 @@ class List extends React.Component {
 
         if (saveShow){
             return (
-                <div>
+                <div className="container container-sub">
                     <Sublist
                         toggleForm={toggleForm} 
                         handleChange={this.handleChange} 
