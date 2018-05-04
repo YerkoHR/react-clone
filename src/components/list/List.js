@@ -7,10 +7,6 @@ import Sublist from './sublist/Sublist';
 import Pagination from './pagination/Pagination';
 import './List.css';
 
-// WHEN YOU CALL A FUNCTION FROM A PARENT YOU HAVE TO USE THE PARENTHESIS LIKE THIS OR IT DOESN'T WORK
-// onClick={()=> stateToggleSaved()}   
-
-
 // ORGANIZED!
 
 class List extends React.Component {
@@ -26,11 +22,13 @@ class List extends React.Component {
             currentSub: '', // State to apply filter.
             toggleForm: false, 
             filters: [ 'hot', 'new', 'rising', 'controversial', 'top' ],
-            page: 1, //  ------> everything from here to evaluate!
+            page: 1, 
             totalPages: 50,
             after: '',
             before: '',
-            urlFetch: '',
+            paginationFix: '',
+            currentFilter: '',
+            
         };
         this.stateToggleSaved = this.stateToggleSaved.bind(this);
         this.fetchData = this.fetchData.bind(this);
@@ -40,21 +38,29 @@ class List extends React.Component {
         this.handleSubmit= this.handleSubmit.bind(this);
         this.handleChange= this.handleChange.bind(this);
         this.fetchPagination= this.fetchPagination.bind(this);
+        this.handleDynamicUrl=this.handleDynamicUrl.bind(this);
     }
 
     componentDidMount() {
-        this.fetchData('All','hot');   
+        this.handleDynamicUrl('All','hot', '');   
     }
-    fetchData(sub, filter){
+    handleDynamicUrl(currentSub, currentFilter, paginationFix){
 
-        let urlFetch = `https://www.reddit.com/r/${sub}/${filter}.json?limit=25&t=month&count=25`;
+        this.setState({
+            currentFilter,
+            currentSub,
+            paginationFix,
+        }, () => {
+            this.fetchData();
+        });
+    }
+    fetchData(){
+        let urlFetch = 'https://www.reddit.com/r/' + this.state.currentSub + '/' + this.state.currentFilter + '.json?limit=25&t=month&count=25' + this.state.paginationFix;
         
         this.setState({
             loading: true,
-            currentSub: sub,
-            urlFetch,
         }, () => {
-            fetch(this.state.urlFetch).then(handleResponse).then((data) => {
+            fetch(urlFetch).then(handleResponse).then((data) => {
                 let after = data.data.after;
                 let before = data.data.before;
                 let post = data.data.children.map((data) => {
@@ -62,8 +68,8 @@ class List extends React.Component {
                 });
                 this.setState({
                     post,
-                    after,
                     before,
+                    after,
                     loading: false,
                 }); 
             });
@@ -147,29 +153,13 @@ class List extends React.Component {
         let nextPage = this.state.page;
         nextPage = direction === 'next' ? nextPage + 1 : nextPage - 1;
 
-        // local varible to add after or before code into url to fetch next or previous page.
-
-        let  urlPage = this.state.urlFetch;
-        urlPage = direction === 'next'? urlPage + '&after=' + this.state.after : urlPage + '&before=' + this.state.before;
-
-        // THIS COULD BE FIXED TO FOLLOW D.R.Y BUT FOR NOW TBD!
+        let  urlPage = direction === 'next'? '&after=' + this.state.after : '&before=' + this.state.before;
 
         this.setState({
-            page: nextPage,
+            page: nextPage, 
+            paginationFix: urlPage,
         }, () => {
-            fetch(urlPage).then(handleResponse).then((data) => {
-                let after = data.data.after;
-                let before = data.data.before;
-                let post = data.data.children.map((data) => {
-                    return data.data;
-                });
-                this.setState({
-                    post,
-                    after,
-                    before,
-                    loading: false,
-                });
-            });
+           this.handleDynamicUrl(this.state.currentSub, this.state.currentFilter, urlPage);
         });
     }
 
@@ -193,7 +183,7 @@ class List extends React.Component {
                         handleChange={this.handleChange} 
                         handleSubmit={this.handleSubmit}          
                         stateToggleForm={this.stateToggleForm}
-                        fetchData={this.fetchData}
+                        handleDynamicUrl={this.handleDynamicUrl}
                         showSaved={this.showSaved}
                     />
                     <Postlist 
@@ -214,7 +204,7 @@ class List extends React.Component {
                         handleSubmit={this.handleSubmit}    
                         handleChange={this.handleChange}                   
                         stateToggleForm={this.stateToggleForm}           
-                        fetchData={this.fetchData}
+                        handleDynamicUrl={this.handleDynamicUrl}
                         showSaved={this.showSaved}
                     />
                 </div>
@@ -222,7 +212,7 @@ class List extends React.Component {
                     <Categories 
                         currentSub={currentSub}
                         filters={filters}
-                        fetchData={this.fetchData}
+                        handleDynamicUrl={this.handleDynamicUrl}
                     />
                 </div>
                 <Postlist 
@@ -234,6 +224,7 @@ class List extends React.Component {
                     page={page}
                     totalPages={totalPages}
                     fetchPagination={this.fetchPagination}
+                    handleDynamicUrl={this.handleDynamicUrl}
                 />
             </div>
         );

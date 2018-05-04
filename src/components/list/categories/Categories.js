@@ -4,7 +4,7 @@ import './Categories.css';
 // ORGANIZED!
 
 const Categories = (props) => {
-    const { fetchData, currentSub, filters } = props;
+    const { handleDynamicUrl, currentSub, filters } = props;
 
     return (
         <div className="btn-group"> 
@@ -13,7 +13,7 @@ const Categories = (props) => {
                 key={index}
                     type="button" 
                     className="btn btn-secondary" 
-                    onClick={() => fetchData(currentSub, filter)}
+                    onClick={() => handleDynamicUrl(currentSub, filter, '')}
                 >
                     {filter}
                 </button>

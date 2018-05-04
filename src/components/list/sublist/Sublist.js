@@ -5,7 +5,7 @@ import './Sublist.css';
 
 const Sublist = (props) => {
 
-    const { fetchData, showSaved, subs, stateToggleForm, toggleForm, handleChange, handleSubmit } = props;
+    const { handleDynamicUrl, showSaved, subs, stateToggleForm, toggleForm, handleChange, handleSubmit } = props;
 
     // MEANWHILE BECAUSE ERROR 503 (SERVER OVERLOAD OR SIMILAR) RIGHT NOW I'M TRYING TO CONDITIONALLY RENDER
     // THE  INPUT USER TO ADD A SUB FROM THIS COMPONENT INSTEAD LIST.JS CURRENTLY USING TOGGLE STATE METHOD.
@@ -27,14 +27,14 @@ const Sublist = (props) => {
                 <button 
                     className="btn btn-light" 
                     type="button" 
-                    onClick={() => {fetchData('All', 'hot'); 
+                    onClick={() => {handleDynamicUrl('All', 'hot', ''); 
                     showSaved(false);}}
                 >   All
                 </button>
                 <button 
                     className="btn btn-light"
                     type="button" 
-                    onClick={() => {fetchData('Home', 'hot'); 
+                    onClick={() => {handleDynamicUrl('Home', 'hot', ''); 
                     showSaved(false);}}
                 >   Home
                 </button>
@@ -50,7 +50,8 @@ const Sublist = (props) => {
                         className="btn btn-success"
                         key={index}
                         type="button" 
-                        onClick={() => fetchData(subs.name, 'hot')}
+                        onClick={() => {handleDynamicUrl(subs.name, 'hot', ''); 
+                        showSaved(false);}}
                     >
                         {subs.name}
                     </button>
@@ -89,14 +90,14 @@ const Sublist = (props) => {
             <button 
                 className="btn btn-light" 
                 type="button" 
-                onClick={() => {fetchData('All', 'hot'); 
+                onClick={() => {handleDynamicUrl('All', 'hot', ''); 
                 showSaved(false);}}
             >   All
             </button>
             <button 
                 className="btn btn-light" 
                 type="button" 
-                onClick={() => {fetchData('Home', 'hot'); 
+                onClick={() => {handleDynamicUrl('Home', 'hot', ''); 
                 showSaved(false);}}
             >   Home
             </button>
@@ -112,7 +113,8 @@ const Sublist = (props) => {
                     className="btn btn-success" 
                     type="button" 
                     key={index}  
-                    onClick={() => fetchData(subs.name, 'hot')}
+                    onClick={() => {handleDynamicUrl(subs.name, 'hot', ''); 
+                    showSaved(false)}}
                 >
                     {subs.name}
                 </button>

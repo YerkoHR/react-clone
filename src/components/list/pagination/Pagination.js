@@ -9,7 +9,7 @@ const Pagination = (props) => {
     return (
         <div className="pagination-container">
             <button
-                onClick={() => fetchPagination('prev')} 
+                onClick={() => fetchPagination( 'prev')} 
                 disabled={page <= 1}
             >
                 &larr;
