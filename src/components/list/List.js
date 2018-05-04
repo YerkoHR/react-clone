@@ -18,14 +18,13 @@ class List extends React.Component {
             post: [],
             subs: [],
             value: '',
-            error: null,
             loading: false,
-            saved: [],
-            saveShow: false,
-            currentSub: '',
-            toComments: '',
-            toggleForm: false,
-            page: 1,
+            saved: [], // Store saved posts.
+            saveShow: false, // State to show or don't save posts, since it's the only not fetched data here.
+            currentSub: '', // State to apply filter.
+            toggleForm: false, 
+            filters: [ 'Hot', 'New', 'Rising', 'Controversial', 'Top' ],
+            page: 1, //  ------> everything from here to evaluate!
             totalPages: 50,
             after: '',
             before: '',
@@ -44,7 +43,6 @@ class List extends React.Component {
     componentDidMount() {
         this.fetchData('All','hot');   
     }
-
     fetchData(sub, categorie){
 
         this.setState({
@@ -68,12 +66,7 @@ class List extends React.Component {
                     loading: false,
                 }); 
             })
-            .catch((error) => {
-                this.setState({
-                    error: error.errorMessage,
-                    loading: false,
-                });
-            });  
+        
             
     }
     eventHandler(index) {
@@ -86,7 +79,7 @@ class List extends React.Component {
           })
       }
     
-    savePost(toSave, index){
+    savePost(toSave){
         
         let found = this.state.saved.some( (el) => {
             return el.id === toSave.id;
@@ -102,8 +95,8 @@ class List extends React.Component {
         }
         
     }
-    showSaved(yesno){
-        if (yesno === 'yes'){
+    showSaved(condition){
+        if (condition){
         this.setState({
             saveShow: true,
         });
@@ -121,16 +114,20 @@ class List extends React.Component {
           })
     }
     handleSubmit(event) {
-        const aux = this.state.subs;
-        aux.push({name: this.state.value})
-        this.setState({subs: aux}); 
-        console.log(event)
+        const subs = this.state.subs;
+
+        subs.push({
+            name: this.state.value
+        })
+        this.setState({
+            subs,
+        }); 
         event.preventDefault();
-        
-       
-      }
+    }
     handleChange(event) {
-        this.setState({value: event.target.value});
+        this.setState({
+            value: event.target.value,
+        });
     }
 
     fetchPagination( direction){
@@ -161,16 +158,11 @@ class List extends React.Component {
                     loading: false,
                 });console.log(url)
             })
-            .catch((error) => {
-                this.setState({
-                    error: error.errorMessage,
-                    loading: false,
-                });
-            });  })
+        })
     }
 
     render() {
-        const {error, loading, post, saved, saveShow, currentSub, subs, toggleForm, value, page, totalPages} = this.state;
+        const {loading, filters, post, saved, saveShow, currentSub, subs, toggleForm, page, totalPages} = this.state;
 
         if (loading) {
             return (
@@ -180,18 +172,10 @@ class List extends React.Component {
             )
         }
 
-        if (error) {
-            return (
-                <div> 
-                    {error} 
-                </div>  
-            ) 
-        }
         if (saveShow){
             return (
                 <div>
                     <Sublist
-                        value={value}
                         toggleForm={toggleForm} 
                         handleChange={this.handleChange} 
                         handleSubmit={this.handleSubmit}          
@@ -226,6 +210,7 @@ class List extends React.Component {
             <Categories 
                 fetchData={this.fetchData}
                 currentSub={currentSub}
+                filters={filters}
             /></div>
             <Postlist 
             post={post}
@@ -233,9 +218,6 @@ class List extends React.Component {
             eventHandler={this.eventHandler}
             />
             <Pagination 
-            post={post}
-            savePost={this.savePost}
-            eventHandler={this.eventHandler}
             page={page}
             totalPages={totalPages}
             fetchPagination={this.fetchPagination}

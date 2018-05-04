@@ -1,0 +1,33 @@
+a{
+    color: black;
+}
+.container{
+    margin-top: 2em;
+}
+.list-group-item{
+    display: grid;
+    grid-template-columns: 1fr 10fr 1.5fr;
+}
+.vote-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px 10px 5px 1px;
+}
+.post-buttons{
+    
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+.post-text{
+    margin: 5px 10px auto 15px;
+}
+.post-title:hover{
+    text-decoration: none;
+    color: gray;
+}
+.post-comments:hover{
+    color: black;
+}

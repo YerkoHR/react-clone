@@ -1,10 +1,11 @@
 import React from 'react';
+import './Pagination.css';
 
 const Pagination = (props) => {
     const {fetchPagination, page, totalPages} = props;
 
     return (
-        <div>
+        <div className="pagination-container">
             <button
                 onClick={() => fetchPagination('prev')} 
                 disabled={page <= 1}

@@ -1,47 +1,60 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import { withRouter } from 'react-router-dom';
 import './Postlist.css';
-//import Save from './Save';
 
+// ORGANIZED!
 
 const Postlist = (props) => {
     const { post, eventHandler, savePost } = props;
-    return (
-        <div> 
-            <div className="list-group">
+
+    return ( 
+        <div className="container list-group">
            
-                {
-                    
-                    post.map((post, index) => (   
-                    
+            {post.map((post, index) => (   
                 <div
+                    className="list-group-item list-group-item-light"
                     key={post.id} 
-                    className="list-group-item list-group-item-light "
- 
                 > 
-                <div className="vote-area">
-                    <span >&uarr;</span>
-                    <div className="vote-score">{post.score}</div>
-                    <span>&darr;</span>
+                    <div className="vote-area">
+                        <span >&uarr;</span>
+                        <div className="vote-score">{post.score}</div>
+                        <span>&darr;</span>
+                    </div>
+                    <div className="post-area">
+                        <div className="post-text">
+                            <a  
+                                className="post-title"    
+                                target = "_blank"
+                                href = {post.url}       
+                            >
+                                {post.title}
+                            </a>
+                        </div>
+                    </div>
+                    <div className="post-buttons">
+            
+                        <button  
+                            className="post-save btn btn-warning btn-sm" 
+                            type="button" 
+                            onClick={()=> {eventHandler(index); 
+                            savePost(post);}}
+                        >   
+                            {post.saved ? 'Unsave' : 'Save'}
+                        </button>
+                        <a 
+                            className="post-comments" 
+                            href = {"https://reddit.com" + post.permalink} 
+                            target = "_blank"
+                        >
+                            {post.num_comments} Comments
+                        </a>
+                    </div>
                 </div>
-                <a className="post-text"
-                    href = {post.url}
-                    target = "_blank"        
-                >
-                    {post.title}
-                </a>
-                <button  onClick={()=> {eventHandler(index); savePost(post, index);}}>{post.saved ? 'Unsave' : 'Save'}</button>
-                <a  href = {"https://reddit.com" + post.permalink} target = "_blank">{post.num_comments} Comments</a>
-            </div>
-            ))}
-               
-           </div>
+            ))}  
+
         </div>
     )
-
 }
-//{(event)=> savePost(post.title, post.score, post.url)}
 Postlist.propTypes = {
     post: PropTypes.array.isRequired,
     eventHandler: PropTypes.func.isRequired,
