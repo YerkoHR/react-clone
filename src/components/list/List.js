@@ -8,8 +8,10 @@ import Pagination from './pagination/Pagination';
 import './List.css';
 
 // WHEN YOU CALL A FUNCTION FROM A PARENT YOU HAVE TO USE THE PARENTHESIS LIKE THIS OR IT DOESN'T WORK
-// onClick={()=> eventHandler()}   
+// onClick={()=> stateToggleSaved()}   
 
+
+// ORGANIZED!
 
 class List extends React.Component {
     constructor() {
@@ -17,7 +19,7 @@ class List extends React.Component {
         this.state = {
             post: [],
             subs: [],
-            value: '',
+            userInput: '',
             loading: false,
             saved: [], // Store saved posts.
             saveShow: false, // State to show or don't save posts, since it's the only not fetched data here.
@@ -30,7 +32,7 @@ class List extends React.Component {
             before: '',
             urlFetch: '',
         };
-        this.eventHandler = this.eventHandler.bind(this);
+        this.stateToggleSaved = this.stateToggleSaved.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this.savePost = this.savePost.bind(this);
         this.showSaved = this.showSaved.bind(this);
@@ -43,67 +45,69 @@ class List extends React.Component {
     componentDidMount() {
         this.fetchData('All','hot');   
     }
-    fetchData(sub, categorie){
+    fetchData(sub, filter){
 
+        let urlFetch = `https://www.reddit.com/r/${sub}/${filter}.json?limit=25&t=month&count=25`;
+        
         this.setState({
             loading: true,
             currentSub: sub,
-            urlFetch: `https://www.reddit.com/r/${sub}/${categorie}.json?limit=25&t=month&count=25`,
-        });
-        
-        fetch(`https://www.reddit.com/r/${sub}/${categorie}.json?limit=25&t=month&count=25`)
-            .then(handleResponse)
-            .then((data) => {
-            let after = data.data.after;
-            let before = data.data.before;
-            let post = data.data.children.map((data) => {
-                return data.data;
-            });
+            urlFetch,
+        }, () => {
+            fetch(this.state.urlFetch).then(handleResponse).then((data) => {
+                let after = data.data.after;
+                let before = data.data.before;
+                let post = data.data.children.map((data) => {
+                    return data.data;
+                });
                 this.setState({
                     post,
                     after,
                     before,
                     loading: false,
                 }); 
-            })
-        
-            
+            });
+        });   
     }
-    eventHandler(index) {
-
-        //THIS IS THE WAY, NOW FIND A WAY TO PASS THE INDEX IN THE MAP FUNCTION IN POSTLIST!
+    stateToggleSaved(index) {
         const post = this.state.post;
         post[index].saved = !post[index].saved;
+
         this.setState({
             post,
-          })
-      }
-    
-    savePost(toSave){
-        
-        let found = this.state.saved.some( (el) => {
-            return el.id === toSave.id;
+        });
+    }
+    savePost(postToSave){
+        // Check if post is stored in saved array return true if found.
+
+        let found = this.state.saved.some((post) => {
+            return post.id === postToSave.id;
           });
-        if (toSave.saved === true && found === false){ 
-            this.state.saved.push(toSave);
-            this.setState(
-                this.state,
-            );
+
+        // of the saved state in the post to store is true and is not repeated
+        // push it to saved array.
+
+        if ((postToSave.saved) && (!found)){ 
+            this.state.saved.push(postToSave);
         }else{
-            let toRemove = this.state.saved.map((e) => { return e.id; }).indexOf(toSave.id);
+
+            // Search id of post and ask for index, then remove from saved array.
+
+            let toRemove = this.state.saved.map((toRemove) => { 
+                return toRemove.id; 
+            }).indexOf(postToSave.id);
             this.state.saved.splice(toRemove, 1);
-        }
-        
+        }  
     }
     showSaved(condition){
         if (condition){
-        this.setState({
-            saveShow: true,
-        });
+            this.setState({
+                saveShow: true,
+            });
         }else{
-        this.setState({
-            saveShow: false,
-        });
+            this.setState({
+                saveShow: false,
+            });
         }
     }
     stateToggleForm(){
@@ -111,58 +115,66 @@ class List extends React.Component {
         toggleForm = !this.state.toggleForm;
         this.setState({
             toggleForm,
-          })
+        })
     }
     handleSubmit(event) {
         const subs = this.state.subs;
 
         subs.push({
-            name: this.state.value
-        })
+            name: this.state.userInput,
+        });
+
         this.setState({
             subs,
         }); 
+
         event.preventDefault();
     }
     handleChange(event) {
+
         this.setState({
-            value: event.target.value,
+            userInput: event.target.value,
         });
     }
+    fetchPagination(direction){
 
-    fetchPagination( direction){
         this.setState({
             loading: true,
         });
         
+        // this manages display of page number.
+
         let nextPage = this.state.page;
         nextPage = direction === 'next' ? nextPage + 1 : nextPage - 1;
 
+        // local varible to add after or before code into url to fetch next or previous page.
 
-        let  url = this.state.urlFetch;
-        url = direction === 'next'? url + '&after=' + this.state.after : url + '&before=' + this.state.before;
+        let  urlPage = this.state.urlFetch;
+        urlPage = direction === 'next'? urlPage + '&after=' + this.state.after : urlPage + '&before=' + this.state.before;
 
-        this.setState({page: nextPage }, ()=>{
-        fetch(url)
-            .then(handleResponse)
-            .then((data) => {
-            let after = data.data.after;
-            let before = data.data.before;
-            let post = data.data.children.map((data) => {
-                return data.data;
-            });
+        // THIS COULD BE FIXED TO FOLLOW D.R.Y BUT FOR NOW TBD!
+
+        this.setState({
+            page: nextPage,
+        }, () => {
+            fetch(urlPage).then(handleResponse).then((data) => {
+                let after = data.data.after;
+                let before = data.data.before;
+                let post = data.data.children.map((data) => {
+                    return data.data;
+                });
                 this.setState({
                     post,
                     after,
                     before,
                     loading: false,
                 });
-            })
-        })
+            });
+        });
     }
 
     render() {
-        const {loading, filters, post, saved, saveShow, currentSub, subs, toggleForm, page, totalPages} = this.state;
+        const { loading, filters, post, saved, saveShow, currentSub, subs, toggleForm, page, totalPages } = this.state;
 
         if (loading) {
             return (
@@ -176,54 +188,56 @@ class List extends React.Component {
             return (
                 <div className="container container-sub">
                     <Sublist
+                        subs={subs}
                         toggleForm={toggleForm} 
                         handleChange={this.handleChange} 
                         handleSubmit={this.handleSubmit}          
                         stateToggleForm={this.stateToggleForm}
                         fetchData={this.fetchData}
                         showSaved={this.showSaved}
-                        subs={subs}
                     />
                     <Postlist 
                         post={saved} 
                         savePost={this.savePost}
-                        eventHandler={this.eventHandler} 
+                        stateToggleSaved={this.stateToggleSaved} 
                     /> 
                 </div>
             )
         }
        
         return ( 
-        <div>
-            <div className="container container-sub">
-            <Sublist
-                handleSubmit={this.handleSubmit}    
-                handleChange={this.handleChange}                   
-                toggleForm={toggleForm}
-                stateToggleForm={this.stateToggleForm}           
-                fetchData={this.fetchData}
-                showSaved={this.showSaved}
-                subs={subs}
-            />
+            <div>
+                <div className="container container-sub">
+                    <Sublist
+                        subs={subs}
+                        toggleForm={toggleForm}
+                        handleSubmit={this.handleSubmit}    
+                        handleChange={this.handleChange}                   
+                        stateToggleForm={this.stateToggleForm}           
+                        fetchData={this.fetchData}
+                        showSaved={this.showSaved}
+                    />
+                </div>
+                <div className="container container-filter">
+                    <Categories 
+                        currentSub={currentSub}
+                        filters={filters}
+                        fetchData={this.fetchData}
+                    />
+                </div>
+                <Postlist 
+                    post={post}
+                    savePost={this.savePost}
+                    stateToggleSaved={this.stateToggleSaved}
+                />
+                <Pagination 
+                    page={page}
+                    totalPages={totalPages}
+                    fetchPagination={this.fetchPagination}
+                />
             </div>
-            <div className="container container-filter">
-            <Categories 
-                fetchData={this.fetchData}
-                currentSub={currentSub}
-                filters={filters}
-            /></div>
-            <Postlist 
-            post={post}
-            savePost={this.savePost}
-            eventHandler={this.eventHandler}
-            />
-            <Pagination 
-            page={page}
-            totalPages={totalPages}
-            fetchPagination={this.fetchPagination}
-            />
-        </div>
         );
     }
 }
+
 export default List;

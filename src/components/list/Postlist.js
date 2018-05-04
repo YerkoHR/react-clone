@@ -5,7 +5,7 @@ import './Postlist.css';
 // ORGANIZED!
 
 const Postlist = (props) => {
-    const { post, eventHandler, savePost } = props;
+    const { post, stateToggleSaved, savePost } = props;
 
     return ( 
         <div className="container list-group">
@@ -36,14 +36,14 @@ const Postlist = (props) => {
                         <button  
                             className="post-save btn btn-warning btn-sm" 
                             type="button" 
-                            onClick={()=> {eventHandler(index); 
+                            onClick={()=> {stateToggleSaved(index); 
                             savePost(post);}}
                         >   
                             {post.saved ? 'Unsave' : 'Save'}
                         </button>
                         <a 
                             className="post-comments" 
-                            href = {"https://reddit.com" + post.permalink} 
+                            href = { "https://reddit.com" + post.permalink } 
                             target = "_blank"
                         >
                             {post.num_comments} Comments
@@ -57,7 +57,7 @@ const Postlist = (props) => {
 }
 Postlist.propTypes = {
     post: PropTypes.array.isRequired,
-    eventHandler: PropTypes.func.isRequired,
+    stateToggleSaved: PropTypes.func.isRequired,
 }
 
 export default Postlist;

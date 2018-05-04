@@ -8,14 +8,14 @@ const Categories = (props) => {
 
     return (
         <div className="btn-group"> 
-            {filters.map((x, index)=>(
+            {filters.map((filter, index)=>(
                 <button 
                 key={index}
                     type="button" 
                     className="btn btn-secondary" 
-                    onClick={() => fetchData(currentSub, x)}
+                    onClick={() => fetchData(currentSub, filter)}
                 >
-                    {x}
+                    {filter}
                 </button>
             ))}
         </div>
