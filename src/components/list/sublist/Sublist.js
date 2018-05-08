@@ -5,21 +5,7 @@ import './Sublist.css';
 
 const Sublist = (props) => {
 
-    const { handleDynamicUrl, showSaved, subs, stateToggleForm, toggleForm, handleChange, handleSubmit } = props;
-
-    // MEANWHILE BECAUSE ERROR 503 (SERVER OVERLOAD OR SIMILAR) RIGHT NOW I'M TRYING TO CONDITIONALLY RENDER
-    // THE  INPUT USER TO ADD A SUB FROM THIS COMPONENT INSTEAD LIST.JS CURRENTLY USING TOGGLE STATE METHOD.
-
-
-    // EVERYTHING IS COMPLETLY CLEANLY ORGANIZED NOW WITH THE USUAL REACT/JS SYNTAX 
-    // I'M TRYNG TO FOLLOW AN ORDER OF CLASS FIRST TO MAKE STYLING EASIER, DATA DETAILS IN MIDDLE AND FUNCTIONS LAST
-    // ALSO ONE SPACE BETWEEN FIRST COST DEFINITION IN THE COMPONENT AND THE LOOP INSIDE THE RENDERING.
-
-    // TO DO! CHECK WHAT I REALLY NEED IN TERMS OF FUNCTIONS AND PROPS. 
-    // FOR THE FINAL TOUCHE ADD COMMENTS ABOUT WHAT ARE YOU DOING.
-
-    // EVERY FUNCTION AND ALMOST EVERY VARIABLE CHECKED NOW ORGANIZE CODE OF EVERY COMPONENT!!!
-
+    const { resetPage, handleDynamicUrl, showSaved, subs, stateToggleForm, toggleForm, handleChange, handleSubmit } = props;
 
     if (toggleForm){
         return (
@@ -28,14 +14,14 @@ const Sublist = (props) => {
                     className="btn btn-light" 
                     type="button" 
                     onClick={() => {handleDynamicUrl('All', 'hot', ''); 
-                    showSaved(false);}}
+                    showSaved(false); resetPage();}}
                 >   All
                 </button>
                 <button 
                     className="btn btn-light"
                     type="button" 
                     onClick={() => {handleDynamicUrl('Home', 'hot', ''); 
-                    showSaved(false);}}
+                    showSaved(false); resetPage();}}
                 >   Home
                 </button>
                 <button 
@@ -51,7 +37,7 @@ const Sublist = (props) => {
                         key={index}
                         type="button" 
                         onClick={() => {handleDynamicUrl(subs.name, 'hot', ''); 
-                        showSaved(false);}}
+                        showSaved(false); resetPage();}}
                     >
                         {subs.name}
                     </button>
@@ -91,14 +77,14 @@ const Sublist = (props) => {
                 className="btn btn-light" 
                 type="button" 
                 onClick={() => {handleDynamicUrl('All', 'hot', ''); 
-                showSaved(false);}}
+                showSaved(false); resetPage();}}
             >   All
             </button>
             <button 
                 className="btn btn-light" 
                 type="button" 
                 onClick={() => {handleDynamicUrl('Home', 'hot', ''); 
-                showSaved(false);}}
+                showSaved(false); resetPage();}}
             >   Home
             </button>
             <button 
@@ -114,7 +100,7 @@ const Sublist = (props) => {
                     type="button" 
                     key={index}  
                     onClick={() => {handleDynamicUrl(subs.name, 'hot', ''); 
-                    showSaved(false)}}
+                    showSaved(false); resetPage();}}
                 >
                     {subs.name}
                 </button>

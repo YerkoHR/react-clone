@@ -36,7 +36,7 @@ const Postlist = (props) => {
                         <button  
                             className="post-save btn btn-warning btn-sm" 
                             type="button" 
-                            onClick={()=> {stateToggleSaved(index); 
+                            onClick={()=> {stateToggleSaved(post.id); 
                             savePost(post);}}
                         >   
                             {post.saved ? 'Unsave' : 'Save'}
@@ -50,6 +50,7 @@ const Postlist = (props) => {
                         </a>
                     </div>
                 </div>
+            
             ))}  
 
         </div>

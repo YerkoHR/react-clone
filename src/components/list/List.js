@@ -39,6 +39,7 @@ class List extends React.Component {
         this.handleChange= this.handleChange.bind(this);
         this.fetchPagination= this.fetchPagination.bind(this);
         this.handleDynamicUrl=this.handleDynamicUrl.bind(this);
+        this.resetPage=this.resetPage.bind(this);
     }
 
     componentDidMount() {
@@ -53,6 +54,28 @@ class List extends React.Component {
         }, () => {
             this.fetchData();
         });
+    }
+    resetPage(){
+        this.setState({
+            page: 1,
+        });
+    }
+    afterRenderSavedFix(){
+        let saved = this.state.saved;
+        let post = this.state.post;
+
+        post.forEach((x)=>{
+            saved.forEach((y)=>{
+                if (x.id === y.id){
+                    x.saved = y.saved;
+                }
+            });
+        });
+        this.setState({
+            saved,
+            post,
+        },()=>{console.log(post[3].preview.images[0].resolutions[1].url)});
+        
     }
     fetchData(){
         let urlFetch = 'https://www.reddit.com/r/' + this.state.currentSub + '/' + this.state.currentFilter + '.json?limit=25&t=month&count=25' + this.state.paginationFix;
@@ -71,13 +94,17 @@ class List extends React.Component {
                     before,
                     after,
                     loading: false,
-                }); 
+                },()=>{this.afterRenderSavedFix()}); 
             });
         });   
     }
-    stateToggleSaved(index) {
-        const post = this.state.post;
-        post[index].saved = !post[index].saved;
+    stateToggleSaved(id) {
+        let post = this.state.post;
+        post.forEach((element) => {
+            if (element.id === id){
+                element.saved = !element.saved;
+            }
+        });
 
         this.setState({
             post,
@@ -185,6 +212,7 @@ class List extends React.Component {
                         stateToggleForm={this.stateToggleForm}
                         handleDynamicUrl={this.handleDynamicUrl}
                         showSaved={this.showSaved}
+                        resetPage={this.resetPage}
                     />
                     <Postlist 
                         post={saved} 
@@ -206,6 +234,7 @@ class List extends React.Component {
                         stateToggleForm={this.stateToggleForm}           
                         handleDynamicUrl={this.handleDynamicUrl}
                         showSaved={this.showSaved}
+                        resetPage={this.resetPage}
                     />
                 </div>
                 <div className="container container-filter">
@@ -213,6 +242,7 @@ class List extends React.Component {
                         currentSub={currentSub}
                         filters={filters}
                         handleDynamicUrl={this.handleDynamicUrl}
+                        resetPage={this.resetPage}
                     />
                 </div>
                 <Postlist 
