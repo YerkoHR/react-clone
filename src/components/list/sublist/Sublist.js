@@ -20,9 +20,9 @@ const Sublist = (props) => {
                 <button 
                     className="btn btn-light"
                     type="button" 
-                    onClick={() => {handleDynamicUrl('Home', 'hot', ''); 
+                    onClick={() => {handleDynamicUrl('Popular', 'hot', ''); 
                     showSaved(false); resetPage();}}
-                >   Home
+                >   Popular
                 </button>
                 <button 
                     className="btn btn-light" 
@@ -83,9 +83,9 @@ const Sublist = (props) => {
             <button 
                 className="btn btn-light" 
                 type="button" 
-                onClick={() => {handleDynamicUrl('Home', 'hot', ''); 
+                onClick={() => {handleDynamicUrl('Popular', 'hot', ''); 
                 showSaved(false); resetPage();}}
-            >   Home
+            >   Popular
             </button>
             <button 
                 className="btn btn-light"
@@ -111,7 +111,7 @@ const Sublist = (props) => {
                 type="button" 
                 onClick={() => stateToggleForm()} 
             >
-                <i className="material-icons" >add_circle</i>
+                <i className="material-icons add-sub" >add_circle</i>
             </button>
         </div>  
     )

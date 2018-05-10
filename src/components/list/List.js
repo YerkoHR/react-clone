@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {handleResponse} from '../../helpers';
 import Postlist from './Postlist';
 import Loading from '../Loading';
@@ -17,17 +18,26 @@ class List extends React.Component {
             subs: [],
             userInput: '',
             loading: false,
-            saved: [], // Store saved posts.
-            saveShow: false, // State to show or don't save posts, since it's the only not fetched data here.
-            currentSub: '', // State to apply filter.
+            saved: [], 
+            saveShow: false, 
+            currentSub: '', 
             toggleForm: false, 
-            filters: [ 'hot', 'new', 'rising', 'controversial', 'top' ],
+            filters: [ 'hot', 'new', 'rising', 'controversial'],
             page: 1, 
             totalPages: 50,
             after: '',
             before: '',
             paginationFix: '',
             currentFilter: '',
+            top: [
+                { text: 'Past hour', code:'hour'},
+                { text: 'Past 24 hours', code:'day'}, 
+                { text: 'Past week', code:'week'}, 
+                { text: 'Past month', code:'month'}, 
+                { text: 'Past year', code:'year'}, 
+                { text: 'Past year', code:'all'} 
+            ],
+            currentTop: '',
             
         };
         this.stateToggleSaved = this.stateToggleSaved.bind(this);
@@ -45,12 +55,13 @@ class List extends React.Component {
     componentDidMount() {
         this.handleDynamicUrl('All','hot', '');   
     }
-    handleDynamicUrl(currentSub, currentFilter, paginationFix){
+    handleDynamicUrl(currentSub, currentFilter , currentTop, paginationFix){
 
         this.setState({
             currentFilter,
             currentSub,
             paginationFix,
+            currentTop,
         }, () => {
             this.fetchData();
         });
@@ -74,11 +85,11 @@ class List extends React.Component {
         this.setState({
             saved,
             post,
-        },()=>{console.log(post[3].preview.images[0].resolutions[1].url)});
+        });
         
     }
     fetchData(){
-        let urlFetch = 'https://www.reddit.com/r/' + this.state.currentSub + '/' + this.state.currentFilter + '.json?limit=25&t=month&count=25' + this.state.paginationFix;
+        let urlFetch = 'https://www.reddit.com/r/' + this.state.currentSub + '/' + this.state.currentFilter + '.json?limit=25&t=' + this.state.currentTop + '&count=25' + this.state.paginationFix;
         
         this.setState({
             loading: true,
@@ -94,7 +105,7 @@ class List extends React.Component {
                     before,
                     after,
                     loading: false,
-                },()=>{this.afterRenderSavedFix()}); 
+                },()=>{this.afterRenderSavedFix(); this.kFormatter(); this.timeAgoFix();}); 
             });
         });   
     }
@@ -175,7 +186,7 @@ class List extends React.Component {
             loading: true,
         });
         
-        // this manages display of page number.
+        // this manages display of page kber.
 
         let nextPage = this.state.page;
         nextPage = direction === 'next' ? nextPage + 1 : nextPage - 1;
@@ -189,9 +200,32 @@ class List extends React.Component {
            this.handleDynamicUrl(this.state.currentSub, this.state.currentFilter, urlPage);
         });
     }
+    kFormatter(){
+        let k = this.state.post;
+
+        k.forEach((x)=>{
+            x.score =  x.score>1000 ? (x.score / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : x.score;
+            x.num_comments =  x.num_comments>1000 ? (x.num_comments / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : x.num_comments;
+        
+        });
+        
+        this.setState({
+            post: k,
+        });
+    }
+    timeAgoFix() {
+        let newTime = this.state.post;
+        newTime.forEach((x)=>{
+            x.created_utc = moment.unix(x.created_utc).fromNow();
+        });
+        this.setState({
+            post:newTime,
+        });
+        
+    }
 
     render() {
-        const { loading, filters, post, saved, saveShow, currentSub, subs, toggleForm, page, totalPages } = this.state;
+        const { loading, top, filters, post, saved, saveShow, currentSub, subs, toggleForm, page, totalPages } = this.state;
 
         if (loading) {
             return (
@@ -202,25 +236,43 @@ class List extends React.Component {
         }
 
         if (saveShow){
-            return (
-                <div className="container container-sub">
-                    <Sublist
-                        subs={subs}
-                        toggleForm={toggleForm} 
-                        handleChange={this.handleChange} 
-                        handleSubmit={this.handleSubmit}          
-                        stateToggleForm={this.stateToggleForm}
-                        handleDynamicUrl={this.handleDynamicUrl}
-                        showSaved={this.showSaved}
-                        resetPage={this.resetPage}
-                    />
-                    <Postlist 
-                        post={saved} 
-                        savePost={this.savePost}
-                        stateToggleSaved={this.stateToggleSaved} 
-                    /> 
+            if(saved.length>0){
+                return (
+                    <div className="container container-sub">
+                        <Sublist
+                            subs={subs}
+                            toggleForm={toggleForm} 
+                            handleChange={this.handleChange} 
+                            handleSubmit={this.handleSubmit}          
+                            stateToggleForm={this.stateToggleForm}
+                            handleDynamicUrl={this.handleDynamicUrl}
+                            showSaved={this.showSaved}
+                            resetPage={this.resetPage}
+                        />
+                        <Postlist 
+                            post={saved} 
+                            savePost={this.savePost}
+                            stateToggleSaved={this.stateToggleSaved} 
+                        /> 
+                    </div>
+                )
+            }else{
+                return (
+                <div className="container container-sub"> 
+                     <Sublist
+                            subs={subs}
+                            toggleForm={toggleForm} 
+                            handleChange={this.handleChange} 
+                            handleSubmit={this.handleSubmit}          
+                            stateToggleForm={this.stateToggleForm}
+                            handleDynamicUrl={this.handleDynamicUrl}
+                            showSaved={this.showSaved}
+                            resetPage={this.resetPage}
+                        />
+                     <div className="container">No posts saved </div> 
                 </div>
             )
+            }
         }
        
         return ( 
@@ -241,6 +293,7 @@ class List extends React.Component {
                     <Categories 
                         currentSub={currentSub}
                         filters={filters}
+                        top={top}
                         handleDynamicUrl={this.handleDynamicUrl}
                         resetPage={this.resetPage}
                     />

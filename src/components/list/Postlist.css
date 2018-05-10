@@ -1,33 +1,120 @@
 a{
     color: black;
 }
-.container{
-    margin-top: 2em;
+.container {
+    margin: 2em;
 }
-.list-group-item{
+
+.up-arrow.down-arrow {
+    font-size: 10px;
+}
+
+.up-arrow:hover {
+    color: blue;
+}
+
+.down-arrow:hover {
+    color: red;
+}
+
+.comment-icon {
+    font-size: 18px;
+    color: #6A706E;
+}
+
+.list-group-item {
     display: grid;
-    grid-template-columns: 1fr 10fr 1.5fr;
+    grid-template-columns: minmax(100px, 1fr) 10fr minmax(80px, 1.5fr);
+    grid-template-rows: minmax(50px, 1fr);
+    padding: 0;
+    margin-bottom: -1;
+    max-width: 100%;
+     overflow: hidden;
 }
-.vote-area{
-    display: flex;
-    flex-direction: column;
+
+.list-group-item:hover {
+    border: 1px solid black;
+}
+
+.vote-area {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    margin: 5px 10px 5px 1px;
+    margin: 0px 0px 0px 10px;
+    border-right: 0.5px solid #CACFD6;
+    font-size: 13px;
+    font-weight: bold;
 }
-.post-buttons{
+
+.post-area{
+    padding: 3px 0;
+}
+
+.post-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
     text-align: center;
     justify-content: center;
+    align-items: center;
 }
-.post-text{
+
+.post-title {
     margin: 5px 10px auto 15px;
+    line-height: normal;
+    font-weight: 600;
+    text-align: justify;
+    font-size: 100%;
+    align-self: center;
 }
-.post-title:hover{
+
+.post-title:hover {
     text-decoration: none;
- 
-    
-}
-.post-comments:hover{
     color: black;
+}
+
+.post-save {
+    width: 70px;
+}
+
+.save-icon {
+    color: #DD403A;
+}
+
+.post-comments {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px;
+    width: 60px;
+    height: 25px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+    color: #CACFD6;
+    align-items: center;
+}
+
+.post-comments:hover {
+    color: black;
+    background: #CACFD6;
+    transition-delay: 0.1s;
+    border-radius: 2px;
+}
+.post-details{
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    margin-top: 3px;
+}
+.detail-item-1, .detail-item-2, .detail-item-3{
+    margin-right: 7px;
+}
+.detail-item-1{
+font-weight: 600;
+}
+.detail-item-2, .detail-item-3, .detail-item-2:hover, .detail-item-3:hover{   
+    color: 	#808080;
+}
+.underlined:hover{
+    text-decoration-line: underline;
 }

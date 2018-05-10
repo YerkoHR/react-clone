@@ -16,38 +16,48 @@ const Postlist = (props) => {
                     key={post.id} 
                 > 
                     <div className="vote-area">
-                        <span >&uarr;</span>
+                        <div>
+                            <i className="material-icons up-arrow">arrow_upward</i>
+                            </div>        
                         <div className="vote-score">{post.score}</div>
-                        <span>&darr;</span>
+                        <div>
+                            <i className="material-icons down-arrow">arrow_downward</i>
+                        </div>
                     </div>
                     <div className="post-area">
-                        <div className="post-text">
-                            <a  
-                                className="post-title"    
-                                target = "_blank"
-                                href = {post.url}       
+                        <div className="post-title">
+                            <a
+                              target = "_blank"
+                              href = {post.url}       
                             >
-                                {post.title}
-                            </a>
+                            {post.title}
+                            </a> 
+                             <div className="post-details">
+                                <a className="detail-item-1" href={"https://www.reddit.com/" + post.subreddit_name_prefixed}> <span className="underlined"> {post.subreddit_name_prefixed}</span></a>
+                                <a className="detail-item-2" href={"https://www.reddit.com/user/" + post.author}> Posted by <span className="underlined">{"u/" + post.author}</span></a>
+                                <a className="detail-item-3" href={"https://reddit.com" + post.permalink} > <span className="underlined">{post.created_utc}</span></a>
+                            </div>
                         </div>
+                       
                     </div>
                     <div className="post-buttons">
             
-                        <button  
-                            className="post-save btn btn-warning btn-sm" 
-                            type="button" 
+                        <a  
+                            className="post-save" 
                             onClick={()=> {stateToggleSaved(post.id); 
                             savePost(post);}}
                         >   
-                            {post.saved ? 'Unsave' : 'Save'}
-                        </button>
+                            {post.saved ? <i class="material-icons save-icon">favorite</i> : <i className="material-icons unsave-icon">favorite_border</i>}
+                        </a>
+                        <div className="post-comments" ><i className="material-icons comment-icon">mode_comment</i>
                         <a 
-                            className="post-comments" 
                             href = { "https://reddit.com" + post.permalink } 
                             target = "_blank"
-                        >
-                            {post.num_comments} Comments
+                        > 
+                            
+                            {post.num_comments}
                         </a>
+                        </div>
                     </div>
                 </div>
             
@@ -62,3 +72,5 @@ Postlist.propTypes = {
 }
 
 export default Postlist;
+
+//{post.saved ? 'Unsave' : 'Save'}
