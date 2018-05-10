@@ -238,7 +238,8 @@ class List extends React.Component {
         if (saveShow){
             if(saved.length>0){
                 return (
-                    <div className="container container-sub">
+                    <div>
+                    <div className="container  container-sub">
                         <Sublist
                             subs={subs}
                             toggleForm={toggleForm} 
@@ -249,6 +250,7 @@ class List extends React.Component {
                             showSaved={this.showSaved}
                             resetPage={this.resetPage}
                         />
+                        </div>
                         <Postlist 
                             post={saved} 
                             savePost={this.savePost}

@@ -5,31 +5,33 @@ a{
     margin: 2em;
 }
 
-.up-arrow.down-arrow {
-    font-size: 10px;
+.up-arrow, .down-arrow {
+    font-size: 22px;
 }
 
 .up-arrow:hover {
     color: blue;
+    flex: 1 ;
+    
 }
 
 .down-arrow:hover {
     color: red;
+    flex: 1 ;
 }
 
 .comment-icon {
     font-size: 18px;
     color: #6A706E;
 }
-
+.list-group{
+    margin: 15px;
+}
 .list-group-item {
     display: grid;
-    grid-template-columns: minmax(100px, 1fr) 10fr minmax(80px, 1.5fr);
-    grid-template-rows: minmax(50px, 1fr);
-    padding: 0;
-    margin-bottom: -1;
-    max-width: 100%;
-     overflow: hidden;
+    grid-template-columns: minmax(50px, 1fr) 10fr minmax(30px, 1fr);
+    grid-template-rows: minmax(40px, 1fr);
+    margin: 0;
 }
 
 .list-group-item:hover {
@@ -37,18 +39,18 @@ a{
 }
 
 .vote-area {
-    height: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr 1fr; 
     align-items: center;
-    margin: 0px 0px 0px 10px;
-    border-right: 0.5px solid #CACFD6;
+    border-right: 1px solid #CACFD6;
     font-size: 13px;
     font-weight: bold;
+
 }
 
 .post-area{
     padding: 3px 0;
+    margin-left: 30px;
 }
 
 .post-buttons {
@@ -117,4 +119,26 @@ font-weight: 600;
 }
 .underlined:hover{
     text-decoration-line: underline;
+}
+@media screen and (max-width:480px) {
+    .vote-area{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    }
+    .post-area{
+        margin-left: 10px;
+        margin-right: 20px;
+    }
+    .list-group-item{
+        padding: 10px;
+    }
+}
+
+
+@media(max-width: 900px){
+    .post-buttons{
+    display: flex;
+    flex-direction: column-reverse;
+    }
 }

@@ -8,7 +8,7 @@ const Postlist = (props) => {
     const { post, stateToggleSaved, savePost } = props;
 
     return ( 
-        <div className="container list-group">
+        <div className=" list-group">
            
             {post.map((post, index) => (   
                 <div
@@ -49,7 +49,9 @@ const Postlist = (props) => {
                         >   
                             {post.saved ? <i class="material-icons save-icon">favorite</i> : <i className="material-icons unsave-icon">favorite_border</i>}
                         </a>
-                        <div className="post-comments" ><i className="material-icons comment-icon">mode_comment</i>
+                        <div></div>
+                        <div className="post-comments">
+                        <i className="material-icons comment-icon">mode_comment</i>
                         <a 
                             href = { "https://reddit.com" + post.permalink } 
                             target = "_blank"
